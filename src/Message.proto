@@ -27,6 +27,8 @@ option java_package = "com.likbilen.protorpc";
 option java_outer_classname = "MessageProto";
 
 enum Type {
+  REQUEST					= 1;
+  RESPONSE					= 2;
   RESPONSE_CANCEL			= 3;
   RESPONSE_FAILED			= 4;
   RESPONSE_NOT_IMPLEMENTED	= 5;
@@ -45,29 +47,3 @@ message DescriptorResponse{
   repeated DescriptorResponse deps=2;//depenedcies is used by protobuffers
   optional string serviceName=3;
 }
-
-
-//message Message {
-//    repeated Request request = 1;
-//    repeated Response response = 2;
-//	repeated DescriptorResponse descresponse=3;
-//	repeated uint32 controlCode=4;
-//}
-
-//message Request {
-//    required string method = 1; // name of a method_descriptor
-//    optional bytes buffer = 2;      // pb2-encoded message
-//    optional uint32 id = 3;
-//
-//}
-
-//message Error {
-//    required sint32 code = 1;
-//    optional string text = 2;
-//
-//}
-//message Response {
-//    optional bytes serialized_response = 1;     // pb2-encoded message
-//    optional Error error = 2;
-//    required uint32 id = 3;
-//}
