@@ -1,3 +1,12 @@
+#   Copyright (C) 2008 Frederik M.J. Vestre
+
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+
+#   http://www.apache.org/licenses/LICENSE-2.0
+
+
 from google.protobuf.service import RpcController
 from google.protobuf.service import RpcChannel
 from twisted.protocols.basic import Int32StringReceiver
@@ -182,7 +191,6 @@ class TwoWayBase(RpcChannel):
                 resp.buffer=param.SerializeToString();
                 self.encloser.WriteMessage(resp);
         def fireChannelBroken(self):
-            print "Borken"+str(self.brokenChannelListeners)
             for lst in self.brokenChannelListeners: 
                 lst.ChannelBroken(self.encloser);
     
