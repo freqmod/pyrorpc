@@ -40,14 +40,14 @@ class ResponseWaiter:
             self.al.release();
 
     def reset(self,newchan,newco):
-        if (self,al.acquire(0)):
+        if (self.al.acquire(0)):
             try:
-                cbr = None;
-                responded = False;
-                cleanup();
-                _Listen(newchan,newco);
+                self.cbr = None;
+                self.responded = False;
+                self.cleanup();
+                self._Listen(newchan,newco);
             finally:
-                al.release();
+                self.al.release();
         else:
             raise Exception("The response is allready waiting on something");
 
