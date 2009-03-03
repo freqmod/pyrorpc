@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #   Copyright (C) 2008 Frederik M.J. Vestre
 
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,10 +79,19 @@ class TwoWayBase(RpcChannel):
         str=pack("!I",msg.ByteSize())+msg.SerializeToString();
         self.WriteString(str);
     def fillMessage(self,msg):
-        len=unpack("!I",self.ReadString(4))[0];
-        if(len==-1):
+	try:
+	  tb=self.ReadString(4);
+	except:
+	  return None;
+	if(len(tb)<4):
+	  return None;
+        lng=unpack("!I",tb)[0];
+	print "Recieved len:"+str(lng)
+        if(lng==-1):
             return None
-        msgbuf=self.ReadString(len);
+        msgbuf=self.ReadString(lng);
+	if(len(msgbuf)!=lng):
+	  raise "Error: Channel out of sync"
         msg.ParseFromString(msgbuf)
         return msg
     #should be implemented by subclass
@@ -112,6 +122,7 @@ class TwoWayBase(RpcChannel):
             method=None;
             request=None;
             controller=None;
+	    print "Got response:"+str(inmsg.type)
             if(None is inmsg or inmsg.type==Message_pb2.DISCONNECT):
                 connected=False;
                 self._shutdownConnection();

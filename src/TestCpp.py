@@ -24,15 +24,19 @@
 from ResponseWaiter import *;
 from SocketStreams import *;
 from SimpleRpcController import *;
+from TwoWayStream import *;
 import Exprintconfig_pb2;
 import socket
 import sys
 from inspect import *
 
 
-
-chan=SocketChannel("localhost",1246);
+#sout=open("/home/freqmod/pgmz/protorpcpp/bld/test.in.fifo","w");
+#sinn=open("/home/freqmod/pgmz/protorpcpp/bld/test.out.fifo","r");
+chan=SocketChannel("localhost",1238);
+#chan=TwoWayStream(sinn,sout,None)
 chan.start()
+print "STSTR"
 #Create a rpc controller to send with the rpc method
 cont= SimpleRpcController();
 #Create a service that wraps the client channel
@@ -47,13 +51,20 @@ expb.paralell="HappyHour";
 expb.subjectcode="TFY4125";
 expb =  reqbld.exprints.add();
 expb.subjectcode="TDT4100"
-
+print "2sm"
 #Run the RPC method
 service.set_config(cont, reqbld,waiter.Callback());
+print "snm"
 #try:
 if(True):
     #Wait for response, if the response is  null, the method is canceled or has failed and the rpc controller will report what happened.
-    rpo =waiter.Await();
+    print "W4A"    
+    rpo=None
+    try:
+      rpo =waiter.Await(3);
+    except Exception,e:
+      print e
+    print "GA"
     #Clean up the waiter, free a pointer to the RpcChannel so it may be garbage collected.
     #Remember to reset the waiter if you want to use it again.
     waiter.cleanup();

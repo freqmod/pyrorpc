@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #   Copyright (C) 2008 Frederik M.J. Vestre
 
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,17 +28,19 @@ class SocketChannelBase(TwoWayBase,Thread):
             
     def WriteString(self,str):
         print "Send:"+str
-        self.soc.sendall(str)
+        if(self.soc.sendall(str)!=None):
+	  print "Senderror"
+	
 
     def ReadString(self,len):
         print "Read:"+str(len)
         return self.soc.recv(len)
     def run(self):
-        try:
+        #try:
             while(self.connected):
                 self.priv.recieveMessage(self.fillMessage(Message_pb2.Message()))
-        except Exception,e:
-            print "Disconnected"+str(e)
+        #except Exception,e:
+        #    print "Disconnected"+str(e)
     def shutdownImpl(self,closeStreams):
         if(closeStreams):
             self.soc.close()
@@ -80,7 +83,7 @@ class SocketServer(Thread):
             self.soc.listen(1)
             if(not self.connected):
                 return
-            conn, addr = self.soc.accept()
+	    conn, addr = self.soc.accept()
             bs=SocketChannelBase(self.service);
             bs.setSocket(conn)
             bs.shutdownCallback=self;
